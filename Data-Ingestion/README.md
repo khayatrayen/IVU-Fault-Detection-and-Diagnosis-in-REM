@@ -117,6 +117,8 @@ cd ..
 pip3 install psycopg2
 ```
 
+> Create Database Python Driver
+
 ```py
 import psycopg2
 import psycopg2.extras as extras
@@ -149,42 +151,13 @@ class DatabaseManager:
     def close(self):
         self.conn.close()
 
-
-create_table_query = 'create table t (a integer, b varchar(250))'
-list_table_query = 'select * from t limit 10'
-data = [(1,'x'), (2,'y')]
-insert_query = 'insert into t (a, b) values %s'
-
-
-db = DatabaseManager()
-val_1 = db.query(create_table_query)
-val_2 = db.query(list_table_query)
-db.insert(insert_query, data)
-val_3 = db.query(list_table_query)
-db.close()
-
-
-for val in val_1:
-  print ('val 1')
-  print (val)
- 
-print ('\n')
-
-for val in val_2:
-  print ('val 2')
-  print (val)
-
-print ('\n')
-
-for val in val_3:
-  print (val)
-
-print ('\n')
-
 ```
+
+> Create Data Handler
 
 ```py
 import os
+import time
 
 from os import listdir
 from os.path import isfile, join
@@ -279,11 +252,18 @@ for set in sets:
             else:
               bearing_df['set_id'] = 3
             bearing_df['record_time'] = file            
-            df = bearing_df[['record_time', 'set_id', 'bearing_id', 'x_axis', 'y_axis', 'inner_race_faillure', 'roller_element_faillure', 'outer_race_failure']]  
-            
+            df = bearing_df[['record_time', 'set_id', 'bearing_id', 'x_axis', 'y_axis', 'inner_race_faillure', 'roller_element_faillure', 'outer_race_failure']]              
         df.head()
+        
         output_data = [tuple(x) for x in df.values]
         print (output_data[:5])
+        
+        insert_query = 'INSERT INTO bearing (record_time, set_id, bearing_id, x_axis, y_axis, inner_race_faillure, roller_element_faillure, outer_race_failure) values %s'
+        
+        db = DatabaseManager()
+        db.insert(insert_query, data)
+        db.close()
+        time.sleep(1)        
         
         print ('File {0} Processed successfully!'.format(str(count)))
         count+=1 
@@ -293,9 +273,28 @@ for set in sets:
     print (" ")
 ```
 
-At the end of the test-to-failure experiment, inner race defect occurred in bearing 3 and roller element defect in bearing 4.
-At the end of the test-to-failure experiment, outer race failure occurred in bearing 1.
-At the end of the test-to-failure experiment, outer race failure occurred in bearing 3.
+> Check Database Data
+```py
+db = DatabaseManager()
+val_1 = db.query('SELECT * FROM bearing LIMIT 10')
+
+val_2 = db.query("""
+  SELECT 
+    record_time, set_id, bearing_id, COUNT(*) AS rows
+  FROM bearing
+  GROUP BY record_time, set_id, bearing_id
+  ORDER BY record_time, set_id, bearing_id""")
+
+db.close()
+ 
+for val in val_1:
+  print (val)
+
+for val in val_2:
+  print (val)
+```
+
+
 
 ### 6- Data transformation quality assessment
 
