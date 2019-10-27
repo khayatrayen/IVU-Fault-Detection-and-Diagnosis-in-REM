@@ -67,10 +67,13 @@ CREATE TABLE bearing (
   bearing_id VARCHAR (255), 
   x_axis FLOAT,
   y_axis FLOAT,
-  inner_race_faillure INTEGER,
-  roller_element_faillure INTEGER,
-  outer_race_failure INTEGER
+  inner_race_faillure FLOAT,
+  roller_element_faillure FLOAT,
+  outer_race_failure FLOAT
 );
+
+/* quit database */
+\q
  
 ```
 
@@ -211,7 +214,7 @@ for set in sets:
             bearing_1 = data[[0]].copy()
             bearing_1.columns = ['x_axis']
             bearing_1['y_axis'] = 0
-            bearing_1['bearing_id'] = 4            
+            bearing_1['bearing_id'] = 1           
             bearing_1['inner_race_faillure'] = 0
             bearing_1['roller_element_faillure'] = 0
             if set == '2nd_test':
@@ -222,7 +225,7 @@ for set in sets:
             bearing_2 = data[[1]].copy()
             bearing_2.columns = ['x_axis']
             bearing_2['y_axis'] = 0
-            bearing_2['bearing_id'] = 4            
+            bearing_2['bearing_id'] = 2          
             bearing_2['inner_race_faillure'] = 0
             bearing_2['roller_element_faillure'] = 0
             bearing_2['outer_race_failure'] = 0          
@@ -230,7 +233,7 @@ for set in sets:
             bearing_3 = data[[2]].copy()
             bearing_3.columns = ['x_axis']
             bearing_3['y_axis'] = 0
-            bearing_3['bearing_id'] = 4            
+            bearing_3['bearing_id'] = 3           
             bearing_3['inner_race_faillure'] = 0
             bearing_3['roller_element_faillure'] = 0
             if set == '2nd_test':
@@ -261,7 +264,7 @@ for set in sets:
         insert_query = 'INSERT INTO bearing (record_time, set_id, bearing_id, x_axis, y_axis, inner_race_faillure, roller_element_faillure, outer_race_failure) values %s'
         
         db = DatabaseManager()
-        db.insert(insert_query, data)
+        db.insert(insert_query, output_data)
         db.close()
         time.sleep(1)        
         
@@ -298,6 +301,6 @@ for val in val_2:
 
 ### 6- Data transformation quality assessment
 
-To defined
+To defined!
 
 
