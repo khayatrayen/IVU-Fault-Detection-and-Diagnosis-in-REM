@@ -22,7 +22,8 @@ yum -y groupinstall "Development Tools"
 yum -y install python3-devel
 yum -y install postgresql-libs
 yum -y install postgresql-devel
-pip install psycopg2
+pips install psycopg2
+pip3 install pandas
 
 ```
 
@@ -191,12 +192,13 @@ for set in sets:
     
     count = 1
     for file in files:
-        print ('Processing file {0}/{1}...'.format(str(count), str(len(files)))
+        print ('Processing file {0}/{1}...'.format(str(count), str(len(files))))
         data = pd.read_csv(os.path.join(BASE_DIR, set, file), sep='\t', header=None)
-        print ('Processing file {0} successfully!'.format(str(count))
+        print ('Processing file {0} successfully!'.format(str(count)))
         data.head()
+        count+=1
         break
-    
+    break    
     print (" ")
 ```
 
