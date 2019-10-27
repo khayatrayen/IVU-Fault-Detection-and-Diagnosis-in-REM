@@ -66,7 +66,10 @@ CREATE TABLE bearing (
   set_id VARCHAR (255) NOT NULL,  
   bearing_id VARCHAR (255), 
   x_axis FLOAT,
-  y_axis FLOAT
+  y_axis FLOAT,
+  inner_race_faillure,
+  roller_element_faillure,
+  outer_race_failure
 );
  
 ```
@@ -211,13 +214,12 @@ for set in sets:
             bearing_2['bearing_id'] = 2            
             bearing_2['inner_race_faillure'] = 0
             bearing_2['roller_element_faillure'] = 0
-            bearing_2['outer_race_failure'] = 0
-            
+            bearing_2['outer_race_failure'] = 0            
             
             bearing_3 = data[[4, 5]].copy()
             bearing_3.columns = ['x_axis', 'y_axis']
             bearing_3['bearing_id'] = 3            
-            bearing_3['inner_race_faillure'] = 0
+            bearing_3['inner_race_faillure'] = 1
             bearing_3['roller_element_faillure'] = 0
             bearing_3['outer_race_failure'] = 0            
             
@@ -225,13 +227,13 @@ for set in sets:
             bearing_4.columns = ['x_axis', 'y_axis']
             bearing_4['bearing_id'] = 4            
             bearing_4['inner_race_faillure'] = 0
-            bearing_4['roller_element_faillure'] = 0
+            bearing_4['roller_element_faillure'] = 1
             bearing_4['outer_race_failure'] = 0            
             
             bearing_df = pd.concat([bearing_1, bearing_2, bearing_3, bearing_4], ignore_index=True)
             bearing_df['set_id'] = 1
             bearing_df['record_time'] = file
-            df = bearing_df[['record_time', 'set_id', 'bearing_id', 'x_axis', 'y_axis', 'inner_race_faillure', 'roller_element_faillure', 'outer_race_failure']]
+            df = bearing_df[['record_time', 'set_id', 'bearing_id', 'x_axis', 'y_axis', 'inner_race_faillure', 'roller_element_faillure', 'outer_race_failure']]            
         else:
             bearing_1 = data[[0]].copy()
             bearing_1.columns = ['x_axis']
@@ -239,7 +241,10 @@ for set in sets:
             bearing_1['bearing_id'] = 4            
             bearing_1['inner_race_faillure'] = 0
             bearing_1['roller_element_faillure'] = 0
-            bearing_1['outer_race_failure'] = 0            
+            if set == '2nd_test':
+                bearing_1['outer_race_failure'] = 1
+            else:
+                bearing_1['outer_race_failure'] = 0            
                         
             bearing_2 = data[[1]].copy()
             bearing_2.columns = ['x_axis']
@@ -252,11 +257,13 @@ for set in sets:
             bearing_3 = data[[2]].copy()
             bearing_3.columns = ['x_axis']
             bearing_3['y_axis'] = 0
-            bearing_4['bearing_id'] = 4            
-            bearing_4['inner_race_faillure'] = 0
-            bearing_4['roller_element_faillure'] = 0
-            bearing_4['outer_race_failure'] = 0
-            
+            bearing_3['bearing_id'] = 4            
+            bearing_3['inner_race_faillure'] = 0
+            bearing_3['roller_element_faillure'] = 0
+            if set == '2nd_test':
+                bearing_3['outer_race_failure'] = 0
+            else:
+                bearing_3['outer_race_failure'] = 1
             
             bearing_4 = data[[3]].copy()
             bearing_4.columns = ['x_axis']
@@ -272,20 +279,21 @@ for set in sets:
             else:
               bearing_df['set_id'] = 3
             bearing_df['record_time'] = file            
-            df = bearing_df[['record_time', 'set_id', 'bearing_id', 'x_axis', 'y_axis', 'inner_race_faillure', 'roller_element_faillure', 'outer_race_failure']].copy()
-            output_data = [tuple(x) for x in df.values]
+            df = bearing_df[['record_time', 'set_id', 'bearing_id', 'x_axis', 'y_axis', 'inner_race_faillure', 'roller_element_faillure', 'outer_race_failure']]  
             
         df.head()
+        output_data = [tuple(x) for x in df.values]
+        print (output_data[:5])
         
         print ('File {0} Processed successfully!'.format(str(count)))
-        count+=1        
+        count+=1 
         if count == 3:
           break
         
     print (" ")
 ```
 
-1:bearing 3 and roller element defect in bearing 4.
+At the end of the test-to-failure experiment, inner race defect occurred in bearing 3 and roller element defect in bearing 4.
 At the end of the test-to-failure experiment, outer race failure occurred in bearing 1.
 At the end of the test-to-failure experiment, outer race failure occurred in bearing 3.
 
