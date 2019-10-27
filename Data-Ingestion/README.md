@@ -187,18 +187,69 @@ sets = ['1st_test', '2nd_test', '3rd_test']
 
 for set in sets:
     print ('Processing set {0}'.format(set))
-    files = [f for f in listdir(os.path.join(BASE_DIR, set)) if isfile(join(os.path.join(BASE_DIR, set), f))]
-    print ('Processing set {0}'.format(str(len(files))))
-    
+    files = [f for f in listdir(os.path.join(BASE_DIR, set)) if isfile(join(os.path.join(BASE_DIR, set), f))]    
     count = 1
-    for file in files:
+    for file in files:        
         print ('Processing file {0}/{1}...'.format(str(count), str(len(files))))
-        data = pd.read_csv(os.path.join(BASE_DIR, set, file), sep='\t', header=None)
-        print ('Processing file {0} successfully!'.format(str(count)))
+        df = pd.DataFrame(columns=['record_time', 'set_id', 'bearing_id', 'x_axis', 'y_axis'])
+        data = pd.read_csv(os.path.join(BASE_DIR, set, file), sep='\t', header=None)        
         data.head()
-        count+=1
+        if set == '1st_test':
+            bearing_1 = data[[0, 1]]
+            bearing_1.columns = ['x_axis', 'y_axis']
+            bearing_1['bearing_id'] = 1
+            
+            bearing_2 = data[[2, 3]]
+            bearing_2.columns = ['x_axis', 'y_axis']
+            bearing_2['bearing_id'] = 2
+            
+            bearing_3 = data[[4, 5]]
+            bearing_3.columns = ['x_axis', 'y_axis']
+            bearing_3['bearing_id'] = 3
+            
+            bearing_4 = data[[6, 7]]
+            bearing_4.columns = ['x_axis', 'y_axis']
+            bearing_4['bearing_id'] = 4
+            
+            bearing_df = pd.concat([bearing_1, bearing_2, bearing_3, bearing_4], ignore_index=True)
+            bearing_df['set_id'] = 1
+            bearing_df['record_time'] = file
+            df = bearing_df[['record_time', 'set_id', 'bearing_id', 'x_axis', 'y_axis']]
+        else:
+            bearing_1 = data[[0]]
+            bearing_1.columns = ['x_axis']
+            bearing_1['y_axis'] = 0
+            bearing_1['bearing_id'] = 4
+            
+            bearing_2 = data[[1]]
+            bearing_2.columns = ['x_axis']
+            bearing_1['y_axis'] = 0
+            bearing_2['bearing_id'] = 4
+            
+            bearing_3 = data[[2]]
+            bearing_3.columns = ['x_axis']
+            bearing_3['y_axis'] = 0
+            bearing_3['bearing_id'] = 4
+            
+            bearing_4 = data[[3]]
+            bearing_4.columns = ['x_axis']
+            bearing_4['y_axis'] = 0
+            bearing_4['bearing_id'] = 4
+            
+            bearing_df = pd.concat([bearing_1, bearing_2, bearing_3, bearing_4], ignore_index=True)
+            if set == '2nd_test':
+              bearing_df['set_id'] = 2
+            else:
+              bearing_df['set_id'] = 3
+            bearing_df['record_time'] = file
+            df = bearing_df[['record_time', 'set_id', 'bearing_id', 'x_axis', 'y_axis']]
+            
+        df.head()
+        
+        print ('File {0} Processed successfully!'.format(str(count)))
+        count+=1        
         break
-    break    
+        
     print (" ")
 ```
 
