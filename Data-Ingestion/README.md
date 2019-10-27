@@ -4,7 +4,7 @@
 This section explain the process to load our datasets into Postgres Database. In order to facilitate data processing, features extraction and modelisation we will make date into appropriate structure.
 
 
-### 3- Database preparation
+### 2- Database preparation
 
 > Log to Database form server
 
