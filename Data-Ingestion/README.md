@@ -199,58 +199,59 @@ for set in sets:
         if set == '1st_test':
             bearing_1 = data[[0, 1]]
             bearing_1.columns = ['x_axis', 'y_axis']
-            bearing_1['bearing_id'] = 1
+            bearing_1.loc['bearing_id'] = 1
             
             bearing_2 = data[[2, 3]]
             bearing_2.columns = ['x_axis', 'y_axis']
-            bearing_2['bearing_id'] = 2
+            bearing_2.loc['bearing_id'] = 2
             
             bearing_3 = data[[4, 5]]
             bearing_3.columns = ['x_axis', 'y_axis']
-            bearing_3['bearing_id'] = 3
+            bearing_3.loc['bearing_id'] = 3
             
             bearing_4 = data[[6, 7]]
             bearing_4.columns = ['x_axis', 'y_axis']
-            bearing_4['bearing_id'] = 4
+            bearing_4.loc['bearing_id'] = 4
             
             bearing_df = pd.concat([bearing_1, bearing_2, bearing_3, bearing_4], ignore_index=True)
-            bearing_df['set_id'] = 1
-            bearing_df['record_time'] = file
+            bearing_df.loc['set_id'] = 1
+            bearing_df.loc['record_time'] = file
             df = bearing_df[['record_time', 'set_id', 'bearing_id', 'x_axis', 'y_axis']]
         else:
             bearing_1 = data[[0]]
             bearing_1.columns = ['x_axis']
             bearing_1['y_axis'] = 0
-            bearing_1['bearing_id'] = 4
+            bearing_1.loc['bearing_id'] = 4
             
             bearing_2 = data[[1]]
             bearing_2.columns = ['x_axis']
-            bearing_1['y_axis'] = 0
-            bearing_2['bearing_id'] = 4
+            bearing_2['y_axis'] = 0
+            bearing_2.loc['bearing_id'] = 4
             
             bearing_3 = data[[2]]
             bearing_3.columns = ['x_axis']
             bearing_3['y_axis'] = 0
-            bearing_3['bearing_id'] = 4
+            bearing_3.loc['bearing_id'] = 4
             
             bearing_4 = data[[3]]
             bearing_4.columns = ['x_axis']
             bearing_4['y_axis'] = 0
-            bearing_4['bearing_id'] = 4
+            bearing_4.loc['bearing_id'] = 4
             
             bearing_df = pd.concat([bearing_1, bearing_2, bearing_3, bearing_4], ignore_index=True)
             if set == '2nd_test':
-              bearing_df['set_id'] = 2
+              bearing_df.loc['set_id'] = 2
             else:
               bearing_df['set_id'] = 3
-            bearing_df['record_time'] = file
+            bearing_df.loc['record_time'] = file
             df = bearing_df[['record_time', 'set_id', 'bearing_id', 'x_axis', 'y_axis']]
             
         df.head()
         
         print ('File {0} Processed successfully!'.format(str(count)))
         count+=1        
-        break
+        if count == 3:
+          break
         
     print (" ")
 ```
