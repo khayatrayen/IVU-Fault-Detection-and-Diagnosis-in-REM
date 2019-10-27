@@ -93,34 +93,35 @@ pip3 install psycopg2
 
 ```py
 import psycopg2
+import psycopg2.extras as extras
 
 
-DatabaseManager(object):
-  
-  def __init__(self):
-    try:
-      self.conn = psycopg2.connect("dbname='dev_db' user='datatech' host='localhost' password='datatech'")
-    except:
-      print "Unable to connect to the database"
-
-  def query(self, sql_query):
-    cur = self.conn.cursor()
-    cur.execute(sql_query)
-    rows = cur.fetchall()
-    self.conn.commit()
-    cur.close()    
-    return row
-  
-  def insert(self, insert_query, data):
-    cur = self.conn.cursor()    
-    psycopg2.extras.execute_values (
-      curr, insert_query, data, template=None, page_size=100
-    )
-    self.conn.commit()
-    cur.close() 
-
-  def close(self):
-    self.conn.close()
+class DatabaseManager:
+    
+    def __init__(self):
+        try:
+            self.conn = psycopg2.connect("dbname='dev_db' user='datatech' host='localhost' password='datatech'")
+        except:
+            print ("Unable to connect to the database")
+    
+    def query(self, sql_query):
+        cur = self.conn.cursor()
+        cur.execute(sql_query)
+        rows = cur.fetchall()
+        self.conn.commit()
+        cur.close()    
+        return rows
+    
+    def insert(self, insert_query, data):
+        cur = self.conn.cursor()    
+        extras.execute_values (
+            cur, insert_query, data, template=None, page_size=100
+        )
+        self.conn.commit()
+        cur.close() 
+    
+    def close(self):
+        self.conn.close()
 
 
 create_table_query = 'create table t (a integer, b varchar(250))'
@@ -134,22 +135,23 @@ val_1 = db.query(create_table_query)
 val_2 = db.query(list_table_query)
 db.insert(insert_query, data)
 val_3 = db.query(list_table_query)
+db.close()
+
 
 for val in val_1:
   print ('val 1')
-  print val
+  print (val)
  
 print ('\n')
 
-for val in val_1:
-  print ('val 1')
-  print val
+for val in val_2:
+  print ('val 2')
+  print (val)
 
 print ('\n')
 
-for val in val_1:
-  print ('val 1')
-  print val
+for val in val_3:
+  print (val)
 
 print ('\n')
 
