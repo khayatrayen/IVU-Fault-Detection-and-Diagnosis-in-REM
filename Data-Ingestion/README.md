@@ -3,6 +3,8 @@
 
 This section explain the process to load our datasets into Postgres Database. In order to facilitate data processing, features extraction and modelisation we will make date into appropriate structure.
 
+Initially, each data set consists of individual files that are 1-second vibration signal snapshots recorded at specific intervals. Each file consists of 20,480 points with the sampling rate set at 20 kHz.
+
 
 ### 1
 
