@@ -39,6 +39,6 @@ CREATE TABLE bearing (
   bearing_id VARCHAR (255), 
   x_axis FLOAT,
   y_axis FLOAT
-;
+);
  
 ```
