@@ -297,6 +297,13 @@ for val in val_2:
   print (val)
 ```
 
+> Check Database
+
+<br>
+
+<img src="https://github.com/kheopsys/IVU-Fault-Detection-and-Diagnosis-in-REM/blob/master/Data-Ingestion/img/db.PNG">
+
+<br>
 
 
 ### 6- Data transformation quality assessment
