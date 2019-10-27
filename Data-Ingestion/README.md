@@ -6,7 +6,7 @@ This section explain the process to load our datasets into Postgres Database. In
 
 ### 2- Database preparation
 
-> Log to Database form server
+> Log to Database
 
 ```sh
 # log to database
