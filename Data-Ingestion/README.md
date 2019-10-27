@@ -6,7 +6,7 @@ This section explain the process to load our datasets into Postgres Database. In
 Initially, each data set consists of individual files that are 1-second vibration signal snapshots recorded at specific intervals. Each file consists of 20,480 points with the sampling rate set at 20 kHz.
 
 
-### 1
+### 2- Configure server
 
 ```sh
 # install some useful packages
@@ -29,7 +29,7 @@ pip3 install pandas
 
 ```
 
-### 2- Database preparation
+### 3- Database preparation
 
 > Log to Database
 
@@ -68,7 +68,7 @@ CREATE TABLE bearing (
  
 ```
 
-### 3- Download bearing datatset
+### 4- Download bearing datatset
 
 ```sh
 # create data folder
@@ -104,7 +104,7 @@ rm 3rd_test.rar
 cd ..
 ```
 
-### 4- Process data and insert it into database
+### 5- Process data and insert it into database
 
 ```sh
 # install database driver
