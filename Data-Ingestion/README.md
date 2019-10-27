@@ -4,6 +4,22 @@
 This section explain the process to load our datasets into Postgres Database. In order to facilitate data processing, features extraction and modelisation we will make date into appropriate structure.
 
 
+### 1
+
+```sh
+# install some useful packages
+sudo su -
+yum -y install p7zip
+yum -y install wget
+
+cd /tmp
+wget https://www.rarlab.com/rar/rarlinux-x64-5.6.0.tar.gz
+tar -zxvf rarlinux-x64-5.6.0.tar.gz
+cd rar
+cp -v rar unrar /usr/local/bin/
+
+```
+
 ### 2- Database preparation
 
 > Log to Database
@@ -42,3 +58,26 @@ CREATE TABLE bearing (
 );
  
 ```
+
+### 3- Download bearing datatset
+
+```sh
+# create data folder
+mkdir dataset
+cd dataset
+
+# download sataset
+wget -O IMS.7z https://ti.arc.nasa.gov/c/3/
+
+# unzip file
+7za x IMS.7z
+
+# unrar dataset
+unrar e 1st_test.rar
+unrar e 2nd_test.rar
+unrar e 3rd_test.rar
+```
+
+### 4- Process data and insert it into database
+
+
