@@ -301,7 +301,7 @@ for val in val_2:
 
 <br>
 
-<img src="https://github.com/kheopsys/IVU-Fault-Detection-and-Diagnosis-in-REM/blob/master/Data-Ingestion/img/db.PNG">
+<img src="https://github.com/kheopsys/IVU-Fault-Detection-and-Diagnosis-in-REM/blob/master/Data-Ingestion/img/db.png">
 
 <br>
 
