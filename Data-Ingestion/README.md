@@ -67,9 +67,9 @@ CREATE TABLE bearing (
   bearing_id VARCHAR (255), 
   x_axis FLOAT,
   y_axis FLOAT,
-  inner_race_faillure,
-  roller_element_faillure,
-  outer_race_failure
+  inner_race_faillure INTEGER,
+  roller_element_faillure INTEGER,
+  outer_race_failure INTEGER
 );
  
 ```
