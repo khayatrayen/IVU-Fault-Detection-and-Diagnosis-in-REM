@@ -18,6 +18,12 @@ tar -zxvf rarlinux-x64-5.6.0.tar.gz
 cd rar
 cp -v rar unrar /usr/local/bin/
 
+yum -y groupinstall "Development Tools"
+yum -y install python3-devel
+yum -y install postgresql-libs
+yum -y install postgresql-devel
+pip install psycopg2
+
 ```
 
 ### 2- Database preparation
@@ -73,11 +79,80 @@ wget -O IMS.7z https://ti.arc.nasa.gov/c/3/
 7za x IMS.7z
 
 # unrar dataset
-unrar e 1st_test.rar
-unrar e 2nd_test.rar
-unrar e 3rd_test.rar
+unrar e 1st_test.rar 1st_test &
+unrar e 2nd_test.rar 2nd_test &
+unrar e 3rd_test.rar 3rd_test &
 ```
 
 ### 4- Process data and insert it into database
+
+```sh
+# install database driver
+pip3 install psycopg2
+```
+
+```py
+import psycopg2
+
+
+DatabaseManager(object):
+  
+  def __init__(self):
+    try:
+      self.conn = psycopg2.connect("dbname='dev_db' user='datatech' host='localhost' password='datatech'")
+    except:
+      print "Unable to connect to the database"
+
+  def query(self, sql_query):
+    cur = self.conn.cursor()
+    cur.execute(sql_query)
+    rows = cur.fetchall()
+    self.conn.commit()
+    cur.close()    
+    return row
+  
+  def insert(self, insert_query, data):
+    cur = self.conn.cursor()    
+    psycopg2.extras.execute_values (
+      curr, insert_query, data, template=None, page_size=100
+    )
+    self.conn.commit()
+    cur.close() 
+
+  def close(self):
+    self.conn.close()
+
+
+create_table_query = 'create table t (a integer, b varchar(250))'
+list_table_query = 'select * from t limit 10'
+data = [(1,'x'), (2,'y')]
+insert_query = 'insert into t (a, b) values %s'
+
+
+db = DatabaseManager()
+val_1 = db.query(create_table_query)
+val_2 = db.query(list_table_query)
+db.insert(insert_query, data)
+val_3 = db.query(list_table_query)
+
+for val in val_1:
+  print ('val 1')
+  print val
+ 
+print ('\n')
+
+for val in val_1:
+  print ('val 1')
+  print val
+
+print ('\n')
+
+for val in val_1:
+  print ('val 1')
+  print val
+
+print ('\n')
+
+```
 
 
