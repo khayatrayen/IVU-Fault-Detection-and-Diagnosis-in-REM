@@ -79,9 +79,26 @@ wget -O IMS.7z https://ti.arc.nasa.gov/c/3/
 7za x IMS.7z
 
 # unrar dataset
-unrar e 1st_test.rar 1st_test &
-unrar e 2nd_test.rar 2nd_test &
-unrar e 3rd_test.rar 3rd_test &
+mkdir 1st_test
+cp 1st_test.rar 1st_test
+cd 1st_test
+unrar e 1st_test.rar
+rm 1st_test.rar
+cd ..
+
+mkdir 2nd_test
+cp 2nd_test.rar 2nd_test
+cd 2nd_test
+unrar e 2nd_test.rar
+rm 2nd_test.rar
+cd ..
+
+mkdir 3rd_test
+cp 3rd_test.rar 3rd_test
+cd 3rd_test
+unrar e 3rd_test.rar
+rm 3rd_test.rar
+cd ..
 ```
 
 ### 4- Process data and insert it into database
@@ -156,5 +173,35 @@ for val in val_3:
 print ('\n')
 
 ```
+
+```py
+import os
+
+from os import listdir
+from os.path import isfile, join
+import pandas as pd
+
+BASE_DIR = '/home/datatech/dataset'
+sets = ['1st_test', '2nd_test', '3rd_test']
+
+for set in sets:
+    print ('Processing set {0}'.format(set))
+    files = [f for f in listdir(os.path.join(BASE_DIR, set)) if isfile(join(os.path.join(BASE_DIR, set), f))]
+    print ('Processing set {0}'.format(str(len(files))))
+    
+    count = 1
+    for file in files:
+        print ('Processing file {0}/{1}...'.format(str(count), str(len(files)))
+        data = pd.read_csv(os.path.join(BASE_DIR, set, file), sep='\t', header=None)
+        print ('Processing file {0} successfully!'.format(str(count))
+        data.head()
+        break
+    
+    print (" ")
+```
+
+
+
+
 
 
