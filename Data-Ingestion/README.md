@@ -179,7 +179,6 @@ for set in sets:
         print ('Processing file {0}/{1}...'.format(str(count), str(len(files))))
         data = pd.read_csv(os.path.join(BASE_DIR, set, file), sep='\t', header=None)   
         data['index_id'] = data.index
-        data.head()
         if set == '1st_test':
             bearing_1 = data[[0, 1, 'index_id']].copy()
             bearing_1.columns = ['x_axis', 'y_axis', 'index_id']
@@ -258,18 +257,16 @@ for set in sets:
             else:
               bearing_df['set_id'] = 3
             bearing_df['record_time'] = file            
-            df = bearing_df[['record_time', 'set_id', 'bearing_id', 'index_id', 'x_axis', 'y_axis', 'inner_race_faillure', 'roller_element_faillure', 'outer_race_failure']]              
-        df.head()
+            df = bearing_df[['record_time', 'set_id', 'bearing_id', 'index_id', 'x_axis', 'y_axis', 'inner_race_faillure', 'roller_element_faillure', 'outer_race_failure']]          
         
         output_data = [tuple(x) for x in df.values]
-        print (output_data[:5])
         
         insert_query = 'INSERT INTO bearing (record_time, set_id, bearing_id, index_id, x_axis, y_axis, inner_race_faillure, roller_element_faillure, outer_race_failure) values %s'
         
         db = DatabaseManager()
         db.insert(insert_query, output_data)
         db.close()
-        time.sleep(1)        
+        time.sleep(2)        
         
         print ('File {0} Processed successfully!'.format(str(count)))
         count+=1 
