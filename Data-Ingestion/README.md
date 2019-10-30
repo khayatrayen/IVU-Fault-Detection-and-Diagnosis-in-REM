@@ -48,6 +48,7 @@ We will create a new table named bearing with the following columns:
 - __record_time__: Recod timestamp 
 - __set_id__: Set identifier. Each set describes a test-to-failure experiment (3 sets for 3 independant tests)
 - __bearing_id__: Bearing ID. There is four bearings installed on a shaft.
+- __index_id__: data point row number
 - __x_axis__: X-Axis accelerometer measure (two accelerometers for each bearing [x- and y-axes] for data set 1, one accelerometer for each bearing for data sets 2 and 3)
 - __y_axis__: Y-Axis accelerometer measure (two accelerometers for each bearing [x- and y-axes] for data set 1, one accelerometer for each bearing for data sets 2 and 3)
 - __inner_race_faillure__: Indicate if inner race defect occurred at the end of test (1 if yes, 0 otherwise)
@@ -65,6 +66,7 @@ CREATE TABLE bearing (
   record_time VARCHAR (255) NOT NULL, 
   set_id VARCHAR (255) NOT NULL,  
   bearing_id VARCHAR (255), 
+  index_id VARCHAR (255),
   x_axis FLOAT,
   y_axis FLOAT,
   inner_race_faillure FLOAT,
@@ -175,32 +177,33 @@ for set in sets:
     count = 1
     for file in files:        
         print ('Processing file {0}/{1}...'.format(str(count), str(len(files))))
-        data = pd.read_csv(os.path.join(BASE_DIR, set, file), sep='\t', header=None)        
+        data = pd.read_csv(os.path.join(BASE_DIR, set, file), sep='\t', header=None)   
+        data['index_id'] = data.index
         data.head()
         if set == '1st_test':
-            bearing_1 = data[[0, 1]].copy()
-            bearing_1.columns = ['x_axis', 'y_axis']
+            bearing_1 = data[[0, 1, 'index_id']].copy()
+            bearing_1.columns = ['x_axis', 'y_axis', 'index_id']
             bearing_1['bearing_id'] = 1            
             bearing_1['inner_race_faillure'] = 0
             bearing_1['roller_element_faillure'] = 0
             bearing_1['outer_race_failure'] = 0            
             
-            bearing_2 = data[[2, 3]].copy()
-            bearing_2.columns = ['x_axis', 'y_axis']
+            bearing_2 = data[[2, 3, 'index_id']].copy()
+            bearing_2.columns = ['x_axis', 'y_axis', 'index_id']
             bearing_2['bearing_id'] = 2            
             bearing_2['inner_race_faillure'] = 0
             bearing_2['roller_element_faillure'] = 0
             bearing_2['outer_race_failure'] = 0            
             
-            bearing_3 = data[[4, 5]].copy()
-            bearing_3.columns = ['x_axis', 'y_axis']
+            bearing_3 = data[[4, 5, 'index_id']].copy()
+            bearing_3.columns = ['x_axis', 'y_axis', 'index_id']
             bearing_3['bearing_id'] = 3            
             bearing_3['inner_race_faillure'] = 1
             bearing_3['roller_element_faillure'] = 0
             bearing_3['outer_race_failure'] = 0            
             
-            bearing_4 = data[[6, 7]].copy()
-            bearing_4.columns = ['x_axis', 'y_axis']
+            bearing_4 = data[[6, 7, 'index_id']].copy()
+            bearing_4.columns = ['x_axis', 'y_axis', 'index_id']
             bearing_4['bearing_id'] = 4            
             bearing_4['inner_race_faillure'] = 0
             bearing_4['roller_element_faillure'] = 1
@@ -209,10 +212,10 @@ for set in sets:
             bearing_df = pd.concat([bearing_1, bearing_2, bearing_3, bearing_4], ignore_index=True)
             bearing_df['set_id'] = 1
             bearing_df['record_time'] = file
-            df = bearing_df[['record_time', 'set_id', 'bearing_id', 'x_axis', 'y_axis', 'inner_race_faillure', 'roller_element_faillure', 'outer_race_failure']]            
+            df = bearing_df[['record_time', 'set_id', 'bearing_id', 'index_id', 'x_axis', 'y_axis', 'inner_race_faillure', 'roller_element_faillure', 'outer_race_failure']]            
         else:
-            bearing_1 = data[[0]].copy()
-            bearing_1.columns = ['x_axis']
+            bearing_1 = data[[0, 'index_id']].copy()
+            bearing_1.columns = ['x_axis', 'index_id']
             bearing_1['y_axis'] = 0
             bearing_1['bearing_id'] = 1           
             bearing_1['inner_race_faillure'] = 0
@@ -222,16 +225,16 @@ for set in sets:
             else:
                 bearing_1['outer_race_failure'] = 0            
                         
-            bearing_2 = data[[1]].copy()
-            bearing_2.columns = ['x_axis']
+            bearing_2 = data[[1, 'index_id']].copy()
+            bearing_2.columns = ['x_axis', 'index_id']
             bearing_2['y_axis'] = 0
             bearing_2['bearing_id'] = 2          
             bearing_2['inner_race_faillure'] = 0
             bearing_2['roller_element_faillure'] = 0
             bearing_2['outer_race_failure'] = 0          
             
-            bearing_3 = data[[2]].copy()
-            bearing_3.columns = ['x_axis']
+            bearing_3 = data[[2, 'index_id']].copy()
+            bearing_3.columns = ['x_axis', 'index_id']
             bearing_3['y_axis'] = 0
             bearing_3['bearing_id'] = 3           
             bearing_3['inner_race_faillure'] = 0
@@ -241,8 +244,8 @@ for set in sets:
             else:
                 bearing_3['outer_race_failure'] = 1
             
-            bearing_4 = data[[3]].copy()
-            bearing_4.columns = ['x_axis']
+            bearing_4 = data[[3, 'index_id']].copy()
+            bearing_4.columns = ['x_axis', 'index_id']
             bearing_4['y_axis'] = 0
             bearing_4['bearing_id'] = 4            
             bearing_4['inner_race_faillure'] = 0
@@ -255,13 +258,13 @@ for set in sets:
             else:
               bearing_df['set_id'] = 3
             bearing_df['record_time'] = file            
-            df = bearing_df[['record_time', 'set_id', 'bearing_id', 'x_axis', 'y_axis', 'inner_race_faillure', 'roller_element_faillure', 'outer_race_failure']]              
+            df = bearing_df[['record_time', 'set_id', 'bearing_id', 'index_id', 'x_axis', 'y_axis', 'inner_race_faillure', 'roller_element_faillure', 'outer_race_failure']]              
         df.head()
         
         output_data = [tuple(x) for x in df.values]
         print (output_data[:5])
         
-        insert_query = 'INSERT INTO bearing (record_time, set_id, bearing_id, x_axis, y_axis, inner_race_faillure, roller_element_faillure, outer_race_failure) values %s'
+        insert_query = 'INSERT INTO bearing (record_time, set_id, bearing_id, index_id, x_axis, y_axis, inner_race_faillure, roller_element_faillure, outer_race_failure) values %s'
         
         db = DatabaseManager()
         db.insert(insert_query, output_data)
